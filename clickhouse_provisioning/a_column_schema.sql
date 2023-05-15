@@ -15,10 +15,12 @@ USE `cbioportal` ;
 
 
 -- -----------------------------------------------------
--- Table `cbioportal`.`mutation`
+-- Table `cbioportal`.`genomic_event`
 -- -----------------------------------------------------
+-- This table records genomics events at the single gene level.
+-- For Structural Variants gene1 and gene2 are represented as separate rows.
+-- This table supports queries for the mutates-genes, cna-genes, and structvar-genes endpoints.
 DROP TABLE IF EXISTS `cbioportal`.`genomic_event` ;
-
 CREATE TABLE IF NOT EXISTS `cbioportal`.`genomic_event` (
    `sample_unique_id` VARCHAR(45),
    `variant` VARCHAR(45),
@@ -50,7 +52,6 @@ PRIMARY KEY (`sample_unique_id`, `variant`, `hugo_gene_symbol`, `cancer_study_id
 -- Table `cbioportal`.`structural_variant`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `cbioportal`.`structural_variant` ;
-
 CREATE TABLE IF NOT EXISTS `cbioportal`.`structural_variant` (
   `sample_unique_id` VARCHAR(45),
   `hugo_symbol_gene1` VARCHAR(45),
