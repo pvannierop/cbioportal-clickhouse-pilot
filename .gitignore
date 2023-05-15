@@ -1,2 +1,4 @@
 venv/
 clickhouse_data/
+clickhouse_provisioning/*.json
+.idea/
