@@ -211,8 +211,8 @@ def create_clickhouse_files(study_config: dict) -> None:
                 if sample_indexes is None:
                     header_elements = [ header for header in line.rstrip().split("\t") ]
                     gene_index = header_elements.index("Hugo_Symbol")
-                    sample_indexes = { element: idx for idx, element in enumerate(header_elements) if element != "Hugo_Symbol" }
-                    sample_stable_ids = [ element for element in header_elements if element != "Hugo_Symbol" ]
+                    sample_indexes = { element: idx for idx, element in enumerate(header_elements) if element not in ["Hugo_Symbol", "Entrez_Gene_Id"] }
+                    sample_stable_ids = [ element for element in header_elements if element not in ["Hugo_Symbol", "Entrez_Gene_Id"] ]
                     continue
                 line_elements = line.rstrip().split("\t")
                 gene_symbol = line_elements[gene_index]
