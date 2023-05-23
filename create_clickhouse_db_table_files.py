@@ -2,6 +2,7 @@ import math
 import os
 from os import walk
 from typing import Optional
+import base64
 
 NULL_REPLACEMENT_NUMBER = -1000000
 NULL_REPLACEMENT_STRING = "NULL"
@@ -283,7 +284,11 @@ def create_clickhouse_files(study_config: dict) -> None:
     with open(f"clickhouse_provisioning/sample_{study_name}.json", "w") as f:
         for sample_stable_id in samples.keys():
             patient_stable_id = samples[sample_stable_id]["patient_stable_id"]
-            json_line = f'{{"sample_unique_id": "{cancer_study_id}_{sample_stable_id}", "sample_stable_id": "{sample_stable_id}", "patient_unique_id": "{cancer_study_id}_{patient_stable_id}", "patient_stable_id": "{patient_stable_id}", "cancer_study_identifier": "{cancer_study_id}"}}\n'
+            sample_unique_id = f"{cancer_study_id}_{sample_stable_id}"
+            patient_unique_id = f"{cancer_study_id}_{patient_stable_id}"
+            sample_unique_id_base64 = str(base64.b64encode(sample_unique_id.encode("utf-8")), "utf-8")
+            patient_unique_id_base64 = str(base64.b64encode(patient_unique_id.encode("utf-8")), "utf-8")
+            json_line = f'{{"sample_unique_id": "{sample_unique_id}", "sample_unique_id_base64": "{sample_unique_id_base64}", "sample_stable_id": "{sample_stable_id}", "patient_unique_id": "{patient_unique_id}", "patient_unique_id_base64": "{patient_unique_id_base64}", "patient_stable_id": "{patient_stable_id}", "cancer_study_identifier": "{cancer_study_id}"}}\n'
             f.write(json_line)
 
     with open(f"clickhouse_provisioning/sample_clinical_attribute_categorical_{study_name}.json", "w") as f:
@@ -291,7 +296,7 @@ def create_clickhouse_files(study_config: dict) -> None:
             attrs = [ attr for attr in samples[sample_stable_id]["attrs"] if attr["type"] == "STRING" ]
             patient_stable_id = samples[sample_stable_id]["patient_stable_id"]
             for attr in attrs:
-                json_line = f'{{"patient_unique_id": "{cancer_study_id}_{patient_stable_id}", "sample_unique_id": "{cancer_study_id}_{sample_stable_id}", "attribute_name": "{attr["name"]}", "attribute_value": "{attr["value"]}", "cancer_study_identifier": "{cancer_study_id}"}}\n'
+                json_line = f'{{"patient_unique_id": "{cancer_study_id}_{patient_stable_id}", "sample_unique_id": "{cancer_study_id}_{sample_stable_id}", "attribute_na": "{attr["name"]}", "attribute_value": "{attr["value"]}", "cancer_study_identifier": "{cancer_study_id}"}}\n'
                 f.write(json_line)
 
     with open(f"clickhouse_provisioning/sample_clinical_attribute_numeric_{study_name}.json", "w") as f:

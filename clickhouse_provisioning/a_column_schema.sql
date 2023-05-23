@@ -179,8 +179,10 @@ DROP TABLE IF EXISTS `cbioportal`.`sample` ;
 
 CREATE TABLE IF NOT EXISTS `cbioportal`.`sample` (
    `sample_unique_id` VARCHAR(45),
+   `sample_unique_id_base64` VARCHAR(45),
    `sample_stable_id` VARCHAR(45),
    `patient_unique_id` VARCHAR(45),
+   `patient_unique_id_base64` VARCHAR(45),
    `patient_stable_id` VARCHAR(45),
    `cancer_study_identifier` VARCHAR(45))
 ENGINE = MergeTree
