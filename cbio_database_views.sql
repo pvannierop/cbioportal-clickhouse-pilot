@@ -177,3 +177,22 @@ FROM cancer_study cs
          INNER JOIN patient p on cs.CANCER_STUDY_ID = p.CANCER_STUDY_ID
          INNER JOIN clinical_patient cp on p.INTERNAL_ID = cp.INTERNAL_ID
 WHERE ATTR_VALUE NOT REGEXP '^[0-9.]+$';
+
+-- generic assay normalized VALUE from comma separated VALUES
+-- requires the new table genetic_alteration_normalized in cbioportal mysql database
+CREATE VIEW view_genetic_alteration AS
+select cancer_study.CANCER_STUDY_IDENTIFIER, 
+patient.INTERNAL_ID as patient_unique_id,
+patient.STABLE_ID as patient_stable_id,
+sample.INTERNAL_ID as sample_unique_id,
+sample.STABLE_ID as sample_stable_id,
+genetic_profile.STABLE_ID as genetic_profile_STABLE_ID,
+genetic_entity.STABLE_ID as genetic_entity_STABLE_ID,
+genetic_alteration_normalized.VALUE AS genetic_alteration_normalized_VALUE
+from cancer_study
+join patient on cancer_study.CANCER_STUDY_ID =  patient.CANCER_STUDY_ID
+join sample on patient.INTERNAL_ID = sample.PATIENT_ID
+join genetic_alteration_normalized on sample.INTERNAL_ID = genetic_alteration_normalized.SAMPLE_INTERNAL_ID
+join  genetic_profile on genetic_profile.GENETIC_PROFILE_ID = genetic_alteration_normalized.GENETIC_PROFILE_ID
+join genetic_entity on genetic_entity.ID = genetic_alteration_normalized.GENETIC_ENTITY_ID
+where ENTITY_TYPE='GENERIC_ASSAY';
