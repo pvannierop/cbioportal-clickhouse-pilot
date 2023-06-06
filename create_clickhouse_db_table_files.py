@@ -6,6 +6,7 @@ import base64
 
 NULL_REPLACEMENT_NUMBER = -1000000
 NULL_REPLACEMENT_STRING = "NULL"
+DEFAULT_GENE_PANEL_MATRIX_FILENAME = "data_gene_panel_matrix.txt"
 
 study_configs = [
     {
@@ -20,16 +21,44 @@ study_configs = [
         "study_dir": "/home/pnp300/git/datahub/public/msk_impact_2017",
         "name": "msk_impact_2017"
     },
+    {
+        "study_dir": "/home/pnp300/git/genie/genie_public",
+        "name": "genie_public",
+        "gene_panel_matrix_filename": "data_gene_matrix.txt",
+    },
 ]
+
+
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
+
+def get_attr_value(value):
+    # numerical attributes may still have non numerical values, so we need an additional check here.
+    # for example AGE is a numeric attribute but it may still be "<18", ">89", etc.
+    if is_number(value):
+        return value
+    else:
+        # TODO for now replacing all non numerical values with null to prevent import errors
+        #  ideally the database schema should allow both numerical and non numerical values
+        # return f'"{value}"'
+        return "null"
+
 
 def has_data_type(meta_data: dict, genetic_alteration_type: str, datatype: str) -> bool:
     return len([ meta_filename for meta_filename, meta_fields in meta_data.items() if "genetic_alteration_type" in meta_fields and meta_fields["genetic_alteration_type"] == genetic_alteration_type and meta_fields["datatype"] == datatype ]) > 0
+
 
 def get_filename(meta_data: dict, genetic_alteration_type: str, datatype: str) -> Optional[str]:
     entries = [ meta_fields["data_filename"] for meta_filename, meta_fields in meta_data.items() if "genetic_alteration_type" in meta_fields and meta_fields["genetic_alteration_type"] == genetic_alteration_type and meta_fields["datatype"] == datatype ]
     if len(entries) > 0:
         return entries[0]
     return None
+
 
 def create_clickhouse_files(study_config: dict) -> None:
 
@@ -62,8 +91,15 @@ def create_clickhouse_files(study_config: dict) -> None:
     named_genetic_profiles = { meta_fields["genetic_alteration_type"]: meta_fields for filename, meta_fields in meta_data.items() if "profile_name" in meta_fields and "genetic_alteration_type" in meta_fields and meta_fields["genetic_alteration_type"] in ["MUTATION_EXTENDED", "COPY_NUMBER_ALTERATION", "STRUCTURAL_VARIANT"] }
 
     sample_to_genepanel = {}
-    if os.path.exists(f"{study_dir}/data_gene_panel_matrix.txt"):
-        with open(f"{study_dir}/data_gene_panel_matrix.txt") as infile:
+
+    # gene panel matrix filename is not always the same
+    try:
+        data_gene_panel_matrix_filename = study_config["gene_panel_matrix_filename"]
+    except KeyError:
+        data_gene_panel_matrix_filename = DEFAULT_GENE_PANEL_MATRIX_FILENAME
+
+    if os.path.exists(f"{study_dir}/{data_gene_panel_matrix_filename}"):
+        with open(f"{study_dir}/{data_gene_panel_matrix_filename}") as infile:
             header_idx = None
             for line in infile:
                 if line.startswith("#"):
@@ -243,10 +279,11 @@ def create_clickhouse_files(study_config: dict) -> None:
                 gene1_symbol = line_elements[header_idx["Site1_Hugo_Symbol"]]
                 gene2_symbol = line_elements[header_idx["Site2_Hugo_Symbol"]]
                 sample_stable_id = line_elements[header_idx["Sample_Id"]]
-                samples[sample_stable_id]["svs"] += [{
-                    "hugo_symbol_gene1": gene1_symbol,
-                    "hugo_symbol_gene2": gene2_symbol,
-                }]
+                if sample_stable_id in samples:
+                    samples[sample_stable_id]["svs"] += [{
+                        "hugo_symbol_gene1": gene1_symbol,
+                        "hugo_symbol_gene2": gene2_symbol,
+                    }]
 
     mutation_genetic_profile_stable_id = ""
     cna_genetic_profile_stable_id = ""
@@ -303,7 +340,8 @@ def create_clickhouse_files(study_config: dict) -> None:
         for sample_stable_id in samples.keys():
             attrs = [ attr for attr in samples[sample_stable_id]["attrs"] if attr["type"] in ["NUMBER", "BOOLEAN"] ]
             for attr in attrs:
-                json_line = f'{{"sample_unique_id": "{cancer_study_id}_{sample_stable_id}", "patient_unique_id": "{cancer_study_id}_{patient_stable_id}", "attribute_name": "{attr["name"]}", "attribute_value": {attr["value"]}, "cancer_study_identifier": "{cancer_study_id}"}}\n'
+                attr_value = get_attr_value(attr["value"])
+                json_line = f'{{"sample_unique_id": "{cancer_study_id}_{sample_stable_id}", "patient_unique_id": "{cancer_study_id}_{patient_stable_id}", "attribute_name": "{attr["name"]}", "attribute_value": {attr_value}, "cancer_study_identifier": "{cancer_study_id}"}}\n'
                 f.write(json_line)
 
     with open(f"clickhouse_provisioning/patient_clinical_attribute_categorical_{study_name}.json", "w") as f:
@@ -317,7 +355,8 @@ def create_clickhouse_files(study_config: dict) -> None:
         for patient_stable_id in patients.keys():
             attrs = [ attr for attr in patients[patient_stable_id]["attrs"] if attr["type"] in ["NUMBER", "BOOLEAN"] ]
             for attr in attrs:
-                json_line = f'{{"patient_unique_id": "{cancer_study_id}_{patient_stable_id}", "attribute_name": "{attr["name"]}", "attribute_value": {attr["value"]}, "cancer_study_identifier": "{cancer_study_id}"}}\n'
+                attr_value = get_attr_value(attr["value"])
+                json_line = f'{{"patient_unique_id": "{cancer_study_id}_{patient_stable_id}", "attribute_name": "{attr["name"]}", "attribute_value": {attr_value}, "cancer_study_identifier": "{cancer_study_id}"}}\n'
                 f.write(json_line)
 
     with open(f"clickhouse_provisioning/sample_list_{study_name}.json", "w") as f:
@@ -372,6 +411,7 @@ def create_clickhouse_files(study_config: dict) -> None:
                 if sv["hugo_symbol_gene2"] is not None:
                     json_line = f'{{"sample_unique_id": "{cancer_study_id}_{sample_stable_id}", "variant": "{str(cna["alteration"])}", "hugo_gene_symbol": "{sv["hugo_symbol_gene2"]}", "cancer_study_identifier": "{cancer_study_id}", "genetic_profile_stable_id": "{sv_genetic_profile_stable_id}"}}\n'
                     f.write(json_line)
+
 
 for study_config  in study_configs:
     create_clickhouse_files(study_config)
