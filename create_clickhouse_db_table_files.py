@@ -333,7 +333,7 @@ def create_clickhouse_files(study_config: dict) -> None:
             attrs = [ attr for attr in samples[sample_stable_id]["attrs"] if attr["type"] == "STRING" ]
             patient_stable_id = samples[sample_stable_id]["patient_stable_id"]
             for attr in attrs:
-                json_line = f'{{"patient_unique_id": "{cancer_study_id}_{patient_stable_id}", "sample_unique_id": "{cancer_study_id}_{sample_stable_id}", "attribute_na": "{attr["name"]}", "attribute_value": "{attr["value"]}", "cancer_study_identifier": "{cancer_study_id}"}}\n'
+                json_line = f'{{"patient_unique_id": "{cancer_study_id}_{patient_stable_id}", "sample_unique_id": "{cancer_study_id}_{sample_stable_id}", "attribute_name": "{attr["name"]}", "attribute_value": "{attr["value"]}", "cancer_study_identifier": "{cancer_study_id}"}}\n'
                 f.write(json_line)
 
     with open(f"clickhouse_provisioning/sample_clinical_attribute_numeric_{study_name}.json", "w") as f:
