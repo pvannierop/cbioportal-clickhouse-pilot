@@ -398,18 +398,19 @@ def create_clickhouse_files(study_config: dict) -> None:
     with open(f"clickhouse_provisioning/genomic_event_{study_name}.json", "w") as f:
         for sample_stable_id, sample in samples.items():
             for mut in sample["mutations"]:
-                json_line = f'{{"sample_unique_id": "{cancer_study_id}_{sample_stable_id}", "variant": "{mut["variant"]}", "hugo_gene_symbol": "{mut["hugo_gene_symbol"]}", "cancer_study_identifier": "{cancer_study_id}", "genetic_profile_stable_id": "{mutation_genetic_profile_stable_id}"}}\n'
+                json_line = f'{{"sample_unique_id": "{cancer_study_id}_{sample_stable_id}", "variant": "{mut["variant"]}", "variant_type": "mutation", "hugo_gene_symbol": "{mut["hugo_gene_symbol"]}", "cancer_study_identifier": "{cancer_study_id}", "genetic_profile_stable_id": "{mutation_genetic_profile_stable_id}"}}\n'
                 f.write(json_line)
             for cna in samples[sample_stable_id]["cnas"]:
                 if cna["alteration"] == -2 or cna["alteration"] == 2:
-                    json_line = f'{{"sample_unique_id": "{cancer_study_id}_{sample_stable_id}", "variant": "{str(cna["alteration"])}", "hugo_gene_symbol": "{cna["hugo_gene_symbol"]}", "cancer_study_identifier": "{cancer_study_id}", "genetic_profile_stable_id": "{cna_genetic_profile_stable_id}"}}\n'
+                    json_line = f'{{"sample_unique_id": "{cancer_study_id}_{sample_stable_id}", "variant": "{str(cna["alteration"])}", "variant_type": "cna", "hugo_gene_symbol": "{cna["hugo_gene_symbol"]}", "cancer_study_identifier": "{cancer_study_id}", "genetic_profile_stable_id": "{cna_genetic_profile_stable_id}"}}\n'
                     f.write(json_line)
+            # TODO we are using cna["alteration"] for the variant value, which seems to be wrong, currently we don't have any value for variant in sv
             for sv in samples[sample_stable_id]["svs"]:
                 if sv["hugo_symbol_gene1"] is not None:
-                    json_line = f'{{"sample_unique_id": "{cancer_study_id}_{sample_stable_id}", "variant": "{str(cna["alteration"])}", "hugo_gene_symbol": "{sv["hugo_symbol_gene1"]}", "cancer_study_identifier": "{cancer_study_id}", "genetic_profile_stable_id": "{sv_genetic_profile_stable_id}"}}\n'
+                    json_line = f'{{"sample_unique_id": "{cancer_study_id}_{sample_stable_id}", "variant": "{str(cna["alteration"])}", "variant_type": "sv", "hugo_gene_symbol": "{sv["hugo_symbol_gene1"]}", "cancer_study_identifier": "{cancer_study_id}", "genetic_profile_stable_id": "{sv_genetic_profile_stable_id}"}}\n'
                     f.write(json_line)
                 if sv["hugo_symbol_gene2"] is not None:
-                    json_line = f'{{"sample_unique_id": "{cancer_study_id}_{sample_stable_id}", "variant": "{str(cna["alteration"])}", "hugo_gene_symbol": "{sv["hugo_symbol_gene2"]}", "cancer_study_identifier": "{cancer_study_id}", "genetic_profile_stable_id": "{sv_genetic_profile_stable_id}"}}\n'
+                    json_line = f'{{"sample_unique_id": "{cancer_study_id}_{sample_stable_id}", "variant": "{str(cna["alteration"])}", "variant_type": "sv", "hugo_gene_symbol": "{sv["hugo_symbol_gene2"]}", "cancer_study_identifier": "{cancer_study_id}", "genetic_profile_stable_id": "{sv_genetic_profile_stable_id}"}}\n'
                     f.write(json_line)
 
 
