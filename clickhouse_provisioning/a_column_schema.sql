@@ -24,6 +24,7 @@ DROP TABLE IF EXISTS `cbioportal`.`genomic_event` ;
 CREATE TABLE IF NOT EXISTS `cbioportal`.`genomic_event` (
    `sample_unique_id` VARCHAR(45),
    `variant` VARCHAR(45),
+   `variant_type` VARCHAR(45),
    `hugo_gene_symbol` VARCHAR(45),
    `gene_panel_stable_id` VARCHAR(45),
    `cancer_study_identifier` VARCHAR(45),
@@ -31,22 +32,6 @@ CREATE TABLE IF NOT EXISTS `cbioportal`.`genomic_event` (
 ENGINE = MergeTree
 ORDER BY (`sample_unique_id`, `variant`, `hugo_gene_symbol`, `cancer_study_identifier`, `genetic_profile_stable_id`)
 PRIMARY KEY (`sample_unique_id`, `variant`, `hugo_gene_symbol`, `cancer_study_identifier`, `genetic_profile_stable_id`);
-
--- -----------------------------------------------------
--- Table `cbioportal`.`mutation`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `cbioportal`.`mutation` ;
-
-CREATE TABLE IF NOT EXISTS `cbioportal`.`mutation` (
-  `sample_unique_id` VARCHAR(45),
-  `variant` VARCHAR(45),
-  `hugo_gene_symbol` VARCHAR(45),
-  `gene_panel_stable_id` VARCHAR(45),
-  `cancer_study_identifier` VARCHAR(45),
-  `genetic_profile_stable_id` VARCHAR(45))
-ENGINE = MergeTree
-ORDER BY (`sample_unique_id`, `variant`, `hugo_gene_symbol`, `cancer_study_identifier`)
-PRIMARY KEY (`sample_unique_id`, `variant`, `hugo_gene_symbol`, `cancer_study_identifier`);
 
 -- -----------------------------------------------------
 -- Table `cbioportal`.`structural_variant`
