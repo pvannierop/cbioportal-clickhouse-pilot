@@ -160,7 +160,7 @@ PRIMARY KEY (sample_unique_id, sample_list_stable_id, `name`, cancer_study_ident
 -- -----------------------------------------------------
 -- Table `cbioportal`.`sample`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cbioportal`.`sample` ;
+DROP TABLE IF EXISTS `cbioportal`.`sample`;
 
 CREATE TABLE IF NOT EXISTS `cbioportal`.`sample` (
    `sample_unique_id` VARCHAR(45),

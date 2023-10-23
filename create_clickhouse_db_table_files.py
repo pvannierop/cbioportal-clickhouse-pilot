@@ -9,23 +9,23 @@ NULL_REPLACEMENT_STRING = "NULL"
 DEFAULT_GENE_PANEL_MATRIX_FILENAME = "data_gene_panel_matrix.txt"
 
 study_configs = [
-    {
-        "study_dir": "/home/pnp300/git/datahub/public/msk_met_2021",
-        "name": "msk_met_2021"
-    },
-    {
-        "study_dir": "/home/pnp300/git/datahub/public/msk_ch_2020",
-        "name": "msk_ch_2020"
-    },
+    # {
+    #     "study_dir": "/home/pnp300/git/datahub/public/msk_met_2021",
+    #     "name": "msk_met_2021"
+    # },
+    # {
+    #     "study_dir": "/home/pnp300/git/datahub/public/msk_ch_2020",
+    #     "name": "msk_ch_2020"
+    # },
     {
         "study_dir": "/home/pnp300/git/datahub/public/msk_impact_2017",
         "name": "msk_impact_2017"
     },
-    {
-        "study_dir": "/home/pnp300/git/genie/genie_public",
-        "name": "genie_public",
-        "gene_panel_matrix_filename": "data_gene_matrix.txt",
-    },
+    # {
+    #     "study_dir": "/home/pnp300/git/genie/genie_public",
+    #     "name": "genie_public",
+    #     "gene_panel_matrix_filename": "data_gene_matrix.txt",
+    # },
 ]
 
 
