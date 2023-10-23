@@ -6,14 +6,14 @@ CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_sample` (
     `patient_unique_id` VARCHAR(45),
     `patient_stable_id` VARCHAR(45),
     `cancer_study_identifier` VARCHAR(45))
-ENGINE = MySQL('cbioportal-database:3306', 'cbioportal', 'view_sample', 'cbio', 'P@ssword1');
+ENGINE = MySQL('cbioDB:3306', 'cbioportal', 'view_sample', 'cbio', 'P@ssword1');
 
 CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_sample_list` (
     `sample_unique_id` VARCHAR(45),
     `sample_list_stable_id` VARCHAR(45),
     `name` VARCHAR(45),
     `cancer_study_identifier` VARCHAR(45))
-ENGINE = MySQL('cbioportal-database:3306', 'cbioportal', 'view_sample_list', 'cbio', 'P@ssword1');
+ENGINE = MySQL('cbioDB:3306', 'cbioportal', 'view_sample_list', 'cbio', 'P@ssword1');
 
 CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_genomic_event_mutation` (
    `sample_unique_id` VARCHAR(45),
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_genomic_event_mutation` (
    `gene_panel_stable_id` VARCHAR(45),
    `cancer_study_identifier` VARCHAR(45),
    `genetic_profile_stable_id` VARCHAR(45))
-ENGINE = MySQL('cbioportal-database:3306', 'cbioportal', 'view_genomic_event_mutation', 'cbio', 'P@ssword1');
+ENGINE = MySQL('cbioDB:3306', 'cbioportal', 'view_genomic_event_mutation', 'cbio', 'P@ssword1');
 
 CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_genomic_event_cna` (
   `sample_unique_id` VARCHAR(45),
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_genomic_event_cna` (
   `gene_panel_stable_id` VARCHAR(45),
   `cancer_study_identifier` VARCHAR(45),
   `genetic_profile_stable_id` VARCHAR(45))
-ENGINE = MySQL('cbioportal-database:3306', 'cbioportal', 'view_genomic_event_cna', 'cbio', 'P@ssword1');
+ENGINE = MySQL('cbioDB:3306', 'cbioportal', 'view_genomic_event_cna', 'cbio', 'P@ssword1');
 
 CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_genomic_event_struct_var` (
   `sample_unique_id` VARCHAR(45),
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_genomic_event_struct_var` (
   `gene_panel_stable_id` VARCHAR(45),
   `cancer_study_identifier` VARCHAR(45),
   `genetic_profile_stable_id` VARCHAR(45))
-ENGINE = MySQL('cbioportal-database:3306', 'cbioportal', 'view_genomic_event_struct_var', 'cbio', 'P@ssword1');
+ENGINE = MySQL('cbioDB:3306', 'cbioportal', 'view_genomic_event_struct_var', 'cbio', 'P@ssword1');
 
 CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_mutation` (
     `sample_unique_id` VARCHAR(45),
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_mutation` (
     `cancer_study_identifier` VARCHAR(45),
     `genetic_profile_stable_id` VARCHAR(45))
 --     note: 'view_genomic_event_mutation' is correct here
-ENGINE = MySQL('cbioportal-database:3306', 'cbioportal', 'view_genomic_event_mutation', 'cbio', 'P@ssword1');
+ENGINE = MySQL('cbioDB:3306', 'cbioportal', 'view_genomic_event_mutation', 'cbio', 'P@ssword1');
 
 CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_cna` (
    `sample_unique_id` VARCHAR(45),
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_cna` (
    `gene_panel_stable_id` VARCHAR(45),
    `cancer_study_identifier` VARCHAR(45),
    `genetic_profile_stable_id` VARCHAR(45))
-ENGINE = MySQL('cbioportal-database:3306', 'cbioportal', 'view_cna', 'cbio', 'P@ssword1');
+ENGINE = MySQL('cbioDB:3306', 'cbioportal', 'view_cna', 'cbio', 'P@ssword1');
 
 CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_structural_variant` (
   `sample_unique_id` VARCHAR(45),
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_structural_variant` (
   `gene_panel_stable_id` VARCHAR(45),
   `cancer_study_identifier` VARCHAR(45),
   `genetic_profile_stable_id` VARCHAR(45))
-ENGINE = MySQL('cbioportal-database:3306', 'cbioportal', 'view_structural_variant', 'cbio', 'P@ssword1');
+ENGINE = MySQL('cbioDB:3306', 'cbioportal', 'view_structural_variant', 'cbio', 'P@ssword1');
 
 CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_sample_clinical_attribute_numeric` (
     `patient_unique_id` VARCHAR(45),
@@ -76,14 +76,14 @@ CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_sample_clinical_attribute_numeric
     `attribute_name` VARCHAR(45),
     `attribute_value` FLOAT,
     `cancer_study_identifier` VARCHAR(45))
-ENGINE = MySQL('cbioportal-database:3306', 'cbioportal', 'view_sample_clinical_attribute_numeric', 'cbio', 'P@ssword1');
+ENGINE = MySQL('cbioDB:3306', 'cbioportal', 'view_sample_clinical_attribute_numeric', 'cbio', 'P@ssword1');
 
 CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_patient_clinical_attribute_numeric` (
     `patient_unique_id` VARCHAR(45),
     `attribute_name` VARCHAR(45),
     `attribute_value` FLOAT,
     `cancer_study_identifier` VARCHAR(45))
-ENGINE = MySQL('cbioportal-database:3306', 'cbioportal', 'view_patient_clinical_attribute_numeric', 'cbio', 'P@ssword1');
+ENGINE = MySQL('cbioDB:3306', 'cbioportal', 'view_patient_clinical_attribute_numeric', 'cbio', 'P@ssword1');
 
 CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_sample_clinical_attribute_categorical` (
   `patient_unique_id` VARCHAR(45),
@@ -91,11 +91,11 @@ CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_sample_clinical_attribute_categor
   `attribute_name` VARCHAR(45),
   `attribute_value` VARCHAR(45),
   `cancer_study_identifier` VARCHAR(45))
-ENGINE = MySQL('cbioportal-database:3306', 'cbioportal', 'view_sample_clinical_attribute_categorical', 'cbio', 'P@ssword1');
+ENGINE = MySQL('cbioDB:3306', 'cbioportal', 'view_sample_clinical_attribute_categorical', 'cbio', 'P@ssword1');
 
 CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_patient_clinical_attribute_categorical` (
   `patient_unique_id` VARCHAR(45),
   `attribute_name` VARCHAR(45),
   `attribute_value` VARCHAR(45),
   `cancer_study_identifier` VARCHAR(45))
-ENGINE = MySQL('cbioportal-database:3306', 'cbioportal', 'view_patient_clinical_attribute_categorical', 'cbio', 'P@ssword1');
+ENGINE = MySQL('cbioDB:3306', 'cbioportal', 'view_patient_clinical_attribute_categorical', 'cbio', 'P@ssword1');

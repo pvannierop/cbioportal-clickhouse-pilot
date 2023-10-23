@@ -1,4 +1,4 @@
-INSERT INTO `cbioportal`.`mutation` FROM INFILE '/docker-entrypoint-initdb.d/mutation_msk_impact_2017.json' FORMAT JSONEachRow;
+-- INSERT INTO `cbioportal`.`mutation` FROM INFILE '/docker-entrypoint-initdb.d/mutation_msk_impact_2017.json' FORMAT JSONEachRow;
 -- INSERT INTO `cbioportal`.`mutation` FROM INFILE '/docker-entrypoint-initdb.d/mutation_msk_ch_2020.json' FORMAT JSONEachRow;
 -- INSERT INTO `cbioportal`.`mutation` FROM INFILE '/docker-entrypoint-initdb.d/mutation_msk_met_2021.json' FORMAT JSONEachRow;
 
