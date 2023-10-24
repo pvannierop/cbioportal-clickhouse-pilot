@@ -127,17 +127,16 @@ PRIMARY KEY (patient_unique_id, attribute_name, attribute_value, cancer_study_id
 
 
 -- -----------------------------------------------------
--- Table `cbioportal`.`sample_in_data_profile`
+-- Table `cbioportal`.`sample_in_genetic_profile`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cbioportal`.`sample_in_data_profile` ;
+DROP TABLE IF EXISTS `cbioportal`.`sample_in_genetic_profile`;
 
-CREATE TABLE IF NOT EXISTS `cbioportal`.`sample_in_data_profile` (
+CREATE TABLE IF NOT EXISTS `cbioportal`.`sample_in_genetic_profile` (
   `sample_unique_id` VARCHAR(45),
-  `genetic_profile_stable_id` VARCHAR(45),
-  `cancer_study_identifier` VARCHAR(45))
+  `genetic_profile_stable_id_short` VARCHAR(45))
 ENGINE = MergeTree
-ORDER BY (sample_unique_id, genetic_profile_stable_id, cancer_study_identifier)
-PRIMARY KEY (sample_unique_id, genetic_profile_stable_id, cancer_study_identifier);
+ORDER BY (sample_unique_id, genetic_profile_stable_id_short)
+PRIMARY KEY (sample_unique_id, genetic_profile_stable_id_short);
 
 
 -- -----------------------------------------------------
@@ -171,18 +170,3 @@ CREATE TABLE IF NOT EXISTS `cbioportal`.`sample` (
 ENGINE = MergeTree
 ORDER BY (sample_unique_id, patient_unique_id, cancer_study_identifier)
 PRIMARY KEY (sample_unique_id, patient_unique_id, cancer_study_identifier);
-
--- -----------------------------------------------------
--- Table `cbioportal`.`genetic_profile_counts`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `cbioportal`.`genetic_profile_counts` ;
-
-CREATE TABLE IF NOT EXISTS `cbioportal`.`genetic_profile_counts` (
-  `sample_unique_id` VARCHAR(45),
-  `profile_name` VARCHAR(45),
-  `genetic_profile_stable_id` VARCHAR(45),
-  `cancer_study_identifier` VARCHAR(45),
-  `count` INT)
-ENGINE = MergeTree
-ORDER BY (sample_unique_id, genetic_profile_stable_id, cancer_study_identifier)
-PARTITION BY cancer_study_identifier;
