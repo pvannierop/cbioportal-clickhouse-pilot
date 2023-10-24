@@ -164,3 +164,15 @@ FROM cancer_study cs
          INNER JOIN patient p on cs.CANCER_STUDY_ID = p.CANCER_STUDY_ID
          INNER JOIN clinical_patient cp on p.INTERNAL_ID = cp.INTERNAL_ID
 WHERE ATTR_VALUE NOT REGEXP '^[0-9.]+$';
+
+-- sample_in_data_profile
+DROP VIEW IF EXISTS view_sample_in_data_profile;
+CREATE VIEW view_sample_in_data_profile AS
+SELECT
+    concat(cs.CANCER_STUDY_IDENTIFIER, '_', sample.STABLE_ID) as sample_unique_id,
+    gp.STABLE_ID,
+    cs.CANCER_STUDY_IDENTIFIER
+FROM sample
+         INNER JOIN sample_profile sp on sample.INTERNAL_ID = sp.SAMPLE_ID
+         INNER JOIN genetic_profile gp on sp.GENETIC_PROFILE_ID = gp.GENETIC_PROFILE_ID
+         INNER JOIN cancer_study cs on gp.CANCER_STUDY_ID = cs.CANCER_STUDY_ID;

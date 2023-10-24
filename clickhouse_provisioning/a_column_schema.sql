@@ -127,19 +127,17 @@ PRIMARY KEY (patient_unique_id, attribute_name, attribute_value, cancer_study_id
 
 
 -- -----------------------------------------------------
--- Table `cbioportal`.`genetic_profile`
+-- Table `cbioportal`.`sample_in_data_profile`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cbioportal`.`genetic_profile` ;
+DROP TABLE IF EXISTS `cbioportal`.`sample_in_data_profile` ;
 
-CREATE TABLE IF NOT EXISTS `cbioportal`.`genetic_profile` (
+CREATE TABLE IF NOT EXISTS `cbioportal`.`sample_in_data_profile` (
   `sample_unique_id` VARCHAR(45),
-  `genetic_alteration_type` VARCHAR(45),
-  `datatype` VARCHAR(45),
-  `value` VARCHAR(45),
+  `genetic_profile_stable_id` VARCHAR(45),
   `cancer_study_identifier` VARCHAR(45))
 ENGINE = MergeTree
-ORDER BY (sample_unique_id, genetic_alteration_type, datatype, value, cancer_study_identifier)
-PRIMARY KEY (sample_unique_id, genetic_alteration_type, datatype, value, cancer_study_identifier);
+ORDER BY (sample_unique_id, genetic_profile_stable_id, cancer_study_identifier)
+PRIMARY KEY (sample_unique_id, genetic_profile_stable_id, cancer_study_identifier);
 
 
 -- -----------------------------------------------------
