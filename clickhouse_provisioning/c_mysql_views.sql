@@ -99,3 +99,16 @@ CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_patient_clinical_attribute_catego
   `attribute_value` VARCHAR(45),
   `cancer_study_identifier` VARCHAR(45))
 ENGINE = MySQL('cbioportal-database:3306', 'cbioportal', 'view_patient_clinical_attribute_categorical', 'cbio', 'P@ssword1');
+
+CREATE TABLE IF NOT EXISTS `cbioportal`.`mysql_genetic_alteration` (
+  `sample_unique_id` VARCHAR(45),
+  `sample_stable_id` VARCHAR(45),
+  `patient_unique_id` VARCHAR(45),
+  `patient_stable_id` VARCHAR(45),
+  `genetic_profile_STABLE_ID` VARCHAR(45),
+  `genetic_entity_STABLE_ID` VARCHAR(45),
+  `cancer_study_identifier` VARCHAR(45),
+  `value` VARCHAR(255))
+    ENGINE = MergeTree
+    ORDER BY (`sample_unique_id`, `sample_stable_id`, `patient_unique_id`, `patient_stable_id`, `genetic_profile_STABLE_ID`, `genetic_entity_STABLE_ID`, `cancer_study_identifier`, `value`)
+    PRIMARY KEY (`sample_unique_id`, `sample_stable_id`, `patient_unique_id`, `patient_stable_id`, `genetic_profile_STABLE_ID`, `genetic_entity_STABLE_ID`, `cancer_study_identifier`);
